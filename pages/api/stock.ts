@@ -3,7 +3,7 @@ const API_URL = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&sy
 const CLOSE_KEY = '4. close'
 const TIME_SERIES_KEY = 'Time Series (Daily)'
 
-export default async (req, res) => {
+export async function getStock() {
   const response = await fetch(API_URL)
   const raw = await response.json()
   const data = Object.entries(raw[TIME_SERIES_KEY]).reduce(
@@ -14,10 +14,11 @@ export default async (req, res) => {
     {}
   )
 
-  res.statusCode = 200
-  res.json(data)
+  return data
 }
 
-export async function getStock() {
-  return fetch('http://localhost:3000/api/stock').then((res) => res.json())
+export default async (req, res) => {
+  const data = await getStock()
+  res.statusCode = 200
+  res.json(data)
 }
