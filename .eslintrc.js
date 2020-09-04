@@ -1,19 +1,27 @@
 module.exports = {
   extends: [
-    '@atlassian/observability/react',
-    '@atlassian/observability/typescript',
+    'airbnb-typescript/base',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:import/typescript',
+    'plugin:prettier/recommended',
+    'prettier',
+    'prettier/react',
+    'prettier/@typescript-eslint',
   ],
   globals: {
-    __VERSION__: true,
+    __DEPLOY_ENV__: true,
   },
-  rules: {
-    'max-len': 1,
-    'import/order': 0,
-    'arrow-parens': 0,
-    'react/forbid-prop-types': 0,
-    '@typescript-eslint/no-unused-vars': 1,
-    'import/no-cycle': 0,
-    'import/no-unresolved': 0,
-    'react/react-in-jsx-scope': 0,
+  parser: '@typescript-eslint/parser',
+  env: {
+    browser: true,
+    jest: true,
+  },
+  parserOptions: {
+    project: './tsconfig.json',
+    ecmaVersion: 6,
+    sourceType: 'module',
+    ecmaFeatures: {
+      modules: true,
+    },
   },
 }

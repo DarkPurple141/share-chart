@@ -19,11 +19,15 @@
     "victory": "^35.0.8"
   },
   "devDependencies": {
-    "@atlassian/eslint-config-observability": "^1.5.1",
     "@types/node": "^14.6.3",
     "@types/node-fetch": "^2.5.7",
     "@types/react": "^16.9.49",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
     "eslint": "^6.8.0",
+    "eslint-config-airbnb-typescript": "^9.0.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.20.6",
     "prettier": "^2.1.1",
     "typescript": "^4.0.2"
   }
