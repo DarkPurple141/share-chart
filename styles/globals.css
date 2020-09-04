@@ -16,5 +16,7 @@ a {
 }
 
 main {
-  padding: 20px;
+  margin: auto;
+  max-width: 1000px;
+  padding: 20px 40px;
 }

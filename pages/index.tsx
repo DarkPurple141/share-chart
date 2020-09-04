@@ -58,7 +58,7 @@ type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 export default function Home({ relative, absolute, meta }: Props) {
   return (
-    <div>
+    <>
       <Head>
         <title>TEAM AUD Price</title>
         <link
@@ -79,26 +79,16 @@ export default function Home({ relative, absolute, meta }: Props) {
           <span className="currency aud">{meta.maxAUDPrice}</span> AUD).
         </p>
         <div className="grid">
-          <Card name="AUD">
+          <Card title="Historical Price 2019 - 2020" type="AUD">
             <VictoryChart theme={VictoryTheme.material}>
-              <VictoryAxis
-                // tickValues specifies both the number of ticks and where
-                // they are placed on the axis
-                tickCount={3}
-                tickFormat={simpleDate}
-              />
+              <VictoryAxis tickCount={3} tickFormat={simpleDate} />
               <VictoryAxis dependentAxis tickFormat={(x) => `$${x}`} />
               <VictoryLine data={relative} />
             </VictoryChart>
           </Card>
-          <Card name="USD">
+          <Card title="Historical Price 2019 - 2020" type="USD">
             <VictoryChart theme={VictoryTheme.material}>
-              <VictoryAxis
-                // tickValues specifies both the number of ticks and where
-                // they are placed on the axis
-                tickCount={3}
-                tickFormat={simpleDate}
-              />
+              <VictoryAxis tickCount={3} tickFormat={simpleDate} />
               <VictoryAxis dependentAxis tickFormat={(x) => `$${x}`} />
               <VictoryLine
                 style={{ data: { stroke: colors.B100 } }}
@@ -135,8 +125,8 @@ export default function Home({ relative, absolute, meta }: Props) {
 
           .grid {
             display: grid;
-            margin: 20px 0;
-            gap: 20px;
+            margin: 40px 0;
+            gap: 40px;
             grid-template-columns: 1fr 1fr;
           }
 
@@ -147,6 +137,6 @@ export default function Home({ relative, absolute, meta }: Props) {
           }
         `}</style>
       </main>
-    </div>
+    </>
   )
 }
