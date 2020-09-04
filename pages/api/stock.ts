@@ -18,6 +18,6 @@ export default async (req, res) => {
   res.json(data)
 }
 
-export async function getStock(stock: string = 'TEAM') {
+export async function getStock() {
   return fetch('http://localhost:3000/api/stock').then((res) => res.json())
 }

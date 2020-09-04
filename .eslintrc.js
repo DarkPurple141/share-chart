@@ -24,4 +24,13 @@ module.exports = {
       modules: true,
     },
   },
+  settings: {
+    react: {
+      pragma: 'React',
+      version: 'detect',
+    },
+  },
+  rules: {
+    '@typescript-eslint/no-unused-vars': 0,
+  },
 }
