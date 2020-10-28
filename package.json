@@ -9,11 +9,11 @@
     "lint": "eslint pages utils components --ext .ts,.tsx"
   },
   "dependencies": {
-    "@atlaskit/css-reset": "^6.0.1",
+    "@atlaskit/css-reset": "^6.0.4",
     "@atlaskit/date": "^0.8.1",
     "@atlaskit/lozenge": "^10.0.4",
     "@atlaskit/theme": "^10.0.4",
-    "next": "9.5.3",
+    "next": "^10.0.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "styled-components": "^5.1.1",
