@@ -4,7 +4,7 @@ const API_URL = 'https://api.exchangeratesapi.io/history'
 export async function getRates(ratesQuery: string = 'AUD') {
   const d = new Date()
   const raw = await fetch(
-    `${API_URL}?start_at=2019-01-01&end_at=${d.getFullYear()}-${
+    `${API_URL}?start_at=2020-01-01&end_at=${d.getFullYear()}-${
       d.getMonth() + 1
     }-${d.getDate()}&base=USD&symbols=${ratesQuery}`
   ).then((response) => response.json())
