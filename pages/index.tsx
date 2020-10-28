@@ -23,7 +23,11 @@ export const getStaticProps = async () => {
     .filter(({ x, y }) => x && y)
 
   const relative = data.map(({ x, y, date }) => ({ x, y, date }))
-  const absolute = data.map(({ x, price, date }) => ({ x, y: price, date }))
+  const absolute = data.map(({ x, price, date }) => ({
+    x,
+    y: price,
+    date,
+  }))
 
   const maxUSD = absolute.reduce((acc, curr) => ({
     x: acc.y > curr.y ? acc.x : curr.x,
@@ -39,10 +43,12 @@ export const getStaticProps = async () => {
 
   const meta = {
     maxUSDDate: maxUSD.x,
+    maxUSDPriceRaw: maxUSD.y,
     maxUSDPrice: maxUSD.y.toFixed(2),
     maxUSDPriceInAUD: (rates[maxUSD.date] * maxUSD.y).toFixed(2),
     maxAUDDate: maxAUD.x,
     maxAUDPrice: maxAUD.y.toFixed(2),
+    maxAUDPriceRaw: maxAUD.y,
     maxAUDPriceInUSD: (maxAUD.y / rates[maxAUD.date]).toFixed(2),
   }
 
@@ -55,6 +61,7 @@ export const getStaticProps = async () => {
   }
 }
 type Props = InferGetStaticPropsType<typeof getStaticProps>
+const GRAPH_WIDTH = 700
 
 export default function Home({ relative, absolute, meta }: Props) {
   return (
@@ -79,20 +86,70 @@ export default function Home({ relative, absolute, meta }: Props) {
           <span className="currency aud">{meta.maxAUDPrice}</span> AUD).
         </p>
         <div className="grid">
-          <Card title="Historical Price 2019 - 2020" type="AUD">
-            <VictoryChart theme={VictoryTheme.material}>
+          <Card title="TEAM Closing Price (2020)" type="AUD">
+            <VictoryChart theme={VictoryTheme.material} width={GRAPH_WIDTH}>
               <VictoryAxis tickCount={3} tickFormat={simpleDate} />
               <VictoryAxis dependentAxis tickFormat={(x) => `$${x}`} />
-              <VictoryLine data={relative} />
+              <VictoryLine
+                labels={(data) => data.label}
+                style={{
+                  data: {
+                    strokeDasharray: 10,
+                    stroke: colors.B100,
+                  },
+                }}
+                data={[
+                  {
+                    x: relative[0].x,
+                    y: meta.maxAUDPriceRaw,
+                  },
+                  {
+                    x: relative[Math.floor(relative.length / 2)].x,
+                    y: meta.maxAUDPriceRaw,
+                    label: `Max $${meta.maxAUDPrice}`,
+                  },
+                  {
+                    x: relative[relative.length - 1].x,
+                    y: meta.maxAUDPriceRaw,
+                  },
+                ]}
+                key="maxPrice"
+              />
+              <VictoryLine data={relative} key="data" />
             </VictoryChart>
           </Card>
-          <Card title="Historical Price 2019 - 2020" type="USD">
-            <VictoryChart theme={VictoryTheme.material}>
+          <Card title="TEAM Closing Price (2020)" type="USD">
+            <VictoryChart width={GRAPH_WIDTH} theme={VictoryTheme.material}>
               <VictoryAxis tickCount={3} tickFormat={simpleDate} />
               <VictoryAxis dependentAxis tickFormat={(x) => `$${x}`} />
               <VictoryLine
                 style={{ data: { stroke: colors.B100 } }}
                 data={absolute}
+              />
+              <VictoryLine
+                labels={(data) => data.label}
+                style={{
+                  data: {
+                    strokeDasharray: 10,
+                    stroke: colors.B100,
+                  },
+                }}
+                data={[
+                  {
+                    x: relative[0].x,
+                    y: meta.maxUSDPriceRaw,
+                  },
+                  {
+                    x: relative[Math.floor(relative.length / 2)].x,
+                    y: meta.maxUSDPriceRaw,
+                    label: `Max $${meta.maxUSDPrice}`,
+                  },
+                  {
+                    x: relative[relative.length - 1].x,
+                    y: meta.maxUSDPriceRaw,
+                  },
+                ]}
+                key="maxPrice"
               />
             </VictoryChart>
           </Card>
@@ -101,12 +158,12 @@ export default function Home({ relative, absolute, meta }: Props) {
           h1 {
             display: inline-block;
             padding-bottom: 0.15em;
-            border-bottom: 4px solid ${colors.B100};
+            border-bottom: 2px solid ${colors.B100};
           }
 
           p {
-            max-width: 600px;
-            font-size: 1.2em;
+            max-width: 680px;
+            font-size: 1.1em;
             line-height: 1.8;
           }
 
@@ -127,7 +184,6 @@ export default function Home({ relative, absolute, meta }: Props) {
             display: grid;
             margin: 40px 0;
             gap: 40px;
-            grid-template-columns: 1fr 1fr;
           }
 
           @media screen and (max-width: 768px) {
