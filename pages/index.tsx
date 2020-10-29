@@ -61,7 +61,7 @@ export const getStaticProps = async () => {
   }
 }
 type Props = InferGetStaticPropsType<typeof getStaticProps>
-const GRAPH_WIDTH = 700
+const GRAPH_WIDTH = 600
 
 export default function Home({ relative, absolute, meta }: Props) {
   return (
@@ -163,7 +163,7 @@ export default function Home({ relative, absolute, meta }: Props) {
 
           p {
             max-width: 680px;
-            font-size: 1.1em;
+            font-size: 1.2em;
             line-height: 1.8;
           }
 
