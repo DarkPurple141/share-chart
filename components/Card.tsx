@@ -11,16 +11,16 @@ const Card: React.FC<ICard> = ({ title, type, children }) => (
   <>
     <div className="card">
       <div className="header">
-        <h3>{title}</h3>
+        <h4>{title}</h4>
         <Lozenge appearance={type === 'USD' ? 'inprogress' : 'default'}>
-          <h3>{type}</h3>
+          <h4>{type}</h4>
         </Lozenge>
       </div>
       {children}
     </div>
     <style jsx>{`
       .card {
-        padding: 10px;
+        padding: 16px;
         ${elevation.e200()}
       }
 
