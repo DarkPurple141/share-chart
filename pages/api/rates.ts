@@ -1,27 +1,42 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-const API_URL = 'https://api.exchangeratesapi.io/history'
+import { NextApiHandler } from 'next'
 
-export async function getRates(ratesQuery: string = 'AUD') {
-  const d = new Date()
-  const raw = await fetch(
-    `${API_URL}?start_at=2020-01-01&end_at=${d.getFullYear()}-${
-      d.getMonth() + 1
-    }-${d.getDate()}&base=USD&symbols=${ratesQuery}`
-  ).then((response) => response.json())
-  const { rates } = raw
-  const data = Object.entries(rates).reduce(
-    (acc, [date, rate]) => ({
-      ...acc,
-      [date]: (rate as any).AUD,
-    }),
-    {}
-  )
+const API_URL = 'http://api.exchangeratesapi.io/v1'
 
-  return data
+// eslint-disable-next-line
+type DateFormat = `${number}-${number}-${number}`
+
+interface RatesResponse {
+  success: boolean
+  historical: boolean
+  date: DateFormat
+  timestamp: number // eg. 1387929599,
+  base: 'USD' | 'GBP' | 'EUR' // eg 'AUD'
+  rates: {
+    AUD: number // "USD": 1.636492,
+    USD: number
+  }
 }
 
-export default async (req, res) => {
-  const data = await getRates(req.query.rates)
+const someDate = new Date()
+
+export async function getRates(ratesQuery: string = 'AUD,USD') {
+  const dateString = someDate.toISOString().slice(0, 10)
+  const urlToQuery = `${API_URL}/${dateString}?access_key=${process.env.RATES_API_KEY}&symbols=${ratesQuery}`
+  const response: RatesResponse = await fetch(urlToQuery)
+    .then((res) => res.json())
+    .catch(console.error)
+
+  const { rates } = response
+
+  return {
+    [dateString]: rates.AUD / rates.USD,
+  }
+}
+
+const handler: NextApiHandler = async (req, res) => {
+  const data = await getRates(req.query.rates as any)
   res.statusCode = 200
   res.json(data)
 }
+
+export default handler
