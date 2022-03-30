@@ -17,20 +17,46 @@ interface RatesResponse {
   }
 }
 
-const someDate = new Date()
+const range = Array.from({ length: 18 })
+const dayRange = Array.from({ length: 31 })
 
 export async function getRates(ratesQuery: string = 'AUD,USD') {
-  const dateString = someDate.toISOString().slice(0, 10)
-  const urlToQuery = `${API_URL}/${dateString}?access_key=${process.env.RATES_API_KEY}&symbols=${ratesQuery}`
-  const response: RatesResponse = await fetch(urlToQuery)
-    .then((res) => res.json())
-    .catch(console.error)
+  const results = await Promise.all(
+    range.map(async (_, index) => {
+      const currentDate = new Date()
+      currentDate.setMonth(currentDate.getMonth() - index)
+      const dateString = currentDate.toISOString().slice(0, 10)
+      const urlToQuery = `${API_URL}/${dateString}?access_key=${process.env.RATES_API_KEY}&symbols=${ratesQuery}`
 
-  const { rates } = response
+      const response: RatesResponse = await fetch(urlToQuery).then((res) =>
+        res.json()
+      )
 
-  return {
-    [dateString]: rates.AUD / rates.USD,
-  }
+      const { rates } = response
+
+      const shortenedDate = dateString.slice(0, 7)
+      const rate = rates.AUD / rates.USD
+
+      // this is reduce overfetching from the API and not be rate-limited
+      return Object.fromEntries(
+        dayRange.map((__, dayIndex) => {
+          return [
+            `${shortenedDate}-${
+              dayIndex + 1 < 10 ? `0${dayIndex + 1}` : dayIndex + 1
+            }`,
+            rate,
+          ]
+        })
+      )
+    })
+  )
+
+  return results.reduce((allRates, rate) => {
+    return {
+      ...allRates,
+      ...rate,
+    }
+  }, {})
 }
 
 const handler: NextApiHandler = async (req, res) => {

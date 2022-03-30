@@ -86,7 +86,10 @@ export default function Home({ relative, absolute, meta }: Props) {
           <span className="currency aud">{meta.maxAUDPrice}</span> AUD).
         </p>
         <div className="grid">
-          <Card title="TEAM Closing Price (2020)" type="AUD">
+          <Card
+            title={`TEAM Closing Price (${new Date().getUTCFullYear()})`}
+            type="AUD"
+          >
             <VictoryChart theme={VictoryTheme.material} width={GRAPH_WIDTH}>
               <VictoryAxis tickCount={3} tickFormat={simpleDate} />
               <VictoryAxis dependentAxis tickFormat={(x) => `$${x}`} />
@@ -118,7 +121,10 @@ export default function Home({ relative, absolute, meta }: Props) {
               <VictoryLine data={relative} key="data" />
             </VictoryChart>
           </Card>
-          <Card title="TEAM Closing Price (2020)" type="USD">
+          <Card
+            title={`TEAM Closing Price (${new Date().getUTCFullYear()})`}
+            type="USD"
+          >
             <VictoryChart width={GRAPH_WIDTH} theme={VictoryTheme.material}>
               <VictoryAxis tickCount={3} tickFormat={simpleDate} />
               <VictoryAxis dependentAxis tickFormat={(x) => `$${x}`} />
