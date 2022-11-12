@@ -1,13 +1,14 @@
-import React from 'react'
+import { FC, ReactNode } from 'react'
 import Lozenge from '@atlaskit/lozenge'
 import { elevation } from '@atlaskit/theme'
 
 interface ICard {
   title: string
   type: string
+  children: ReactNode
 }
 
-const Card: React.FC<ICard> = ({ title, type, children }) => (
+const Card: FC<ICard> = ({ title, type, children }) => (
   <>
     <div className="card">
       <div className="header">
